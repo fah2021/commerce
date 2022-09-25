@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+    <h2>Category {{category}}</h2>
+
+    
+        {% for AuctionListing in ActiveListings %}
+        <div class="container">
+          <div class="row" style="margin-top: 30px;">
+            <div class="col-xs-6"> 
+               <img src="{{AuctionListing.header_image.url}}" style="height: 225px;width: 225px;">
+            </div>
+            <div class="col-xs-6" style="padding: 25px;font-size: large;">
+              <div class = "row">
+                <a href="{% url 'auctionListing' AuctionListing.id %}"class="btn btn-outline-primary btn-lg" style="width: 300px;">{{AuctionListing.title}}
+                </a>
+              </div>
+              <div class = "row">
+                Current Price: $ {{AuctionListing.starting_bid}}
+              </div>
+              <div class = "row">
+                      {{AuctionListing.dateCreated}}
+              </div>
+              <div class = "row">
+                  <p>Status:
+                      {% if AuctionListing.status  %}
+                          Active
+                      {% else %}
+                          Disabled
+                      {% endif %}
+                  </p>
+              </div>    
+            </div>  
+          </div>
+        </div>
+        {% endfor %}
+    
+
+    TODO
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container">
+    <h2>Create Listings</h2>
+    {% if messages %}
+  <div class="row">
+  <div class="col-sm-12">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}" role="alert">
+          <p>{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+    {% endif %}
+  <div class="row">
+    <div class = "form-group">
+      <form method="POST" enctype="multipart/form-data">
+          <legend>Form</legend>
+          {% csrf_token %}
+          {{ form.as_p }}
+          {{ form.media }}
+          <button type="submit" class="btn btn-primary">Submit</button>
+
+     </form>
+    </div>
+  </div>
+</div>
+  
+{% endblock %}

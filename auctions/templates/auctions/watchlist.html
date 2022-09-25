@@ -1,0 +1,52 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+<h2>Watchlist</h2>
+
+<ul>
+  {% for w in watch_list %}
+    <div class="container">
+      <div class="row" style="margin-top: 30px;">
+        <div class="col-xs-6"> 
+            <img src="{{w.item_id.header_image.url}}"style="height: 225px;width: 225px;" >
+        </div>
+            
+
+            <div class="col-xs-6" style="padding: 25px;font-size: large;"> 
+                <div class = "row" style="margin-bottom: 5px;">
+                  <a href="{% url 'auctionListing' w.item_id.id %}" class="btn btn-outline-primary btn-lg" style="width: 300px;" > {{w.item_id.title}}</a>
+                </div>
+                <div class = "row"style="margin-bottom: 5px;">
+                  <div class="btn btn-outline-primary btn-lg" style="width: 300px;">
+                  <h5> Current Price : $ {{w.item_id.starting_bid}}</h5>
+                  </div>
+                </div>
+                <div class = "row"style="margin-bottom: 5px;">
+                  <form action="{% url 'Removewatchlist' w.item_id.id %}" method="POST">
+                  {% csrf_token %}
+                  <button type="submit" name="button" value="Removewatchlist" class="btn btn-outline-danger btn-lg" style="width: 300px;">Remove From Watchlist</button>
+                  </form>
+                </div>
+                <div class = "row"style="margin-bottom: 5px;">
+                  <p>Status:
+                    {% if w.item_id.status  %}
+                        Active
+                    {% else %}
+                        Disabled
+                    {% endif %}
+                </p>
+                </div>  
+            </div>
+      </div>
+    </div>
+      
+     {% endfor %}
+
+</ul>
+
+      
+    <a href = "{%url 'index'%}">Back to Active Listing Page</a>
+
+{% endblock %}
+

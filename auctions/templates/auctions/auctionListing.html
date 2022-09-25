@@ -1,0 +1,138 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    {% if messages %}
+    <div class="row">
+    <div class="col-sm-12">
+        {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert">
+        <p>{{ message }}</p>
+    </div>
+    {% endfor %}
+    </div>
+    </div>
+  {% endif %}
+ 
+     
+    <h1>Listing : {{auctionListing.title}}</h1>
+
+    <div class="container">
+      <div class="row" style="margin-top: 30px;">
+
+        <div class="col-xs-6" style="padding: 25px;font-size: large;">
+            <img src="{{auctionListing.header_image.url}}" style="height: 500px;width: 500px;">
+        </div>
+
+        <div class="col-xs-6">
+          <div class = "row" style="margin-top: 30px; margin-bottom: 10px;">
+            <div class="btn btn-success btn-lg" style="width: 300px;">
+            <h5> Current Price : $ {{auctionListing.starting_bid}}</h5>
+            </div>
+          </div>
+          <div class="row ">
+              {%if request.user.username != auctionListing.seller.username %}
+              {%for w in watchlist%}
+              <button type="button" class="btn btn-info btn-lg" style="width: 300px;">Already in watchlist </button>
+              
+              {%empty%}
+             
+              <form action="{% url 'Addwatchlist' auctionListing.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" name="button" value="Watchlist" class="btn btn-outline-secondary  btn-lg" style="width: 300px;">Add to Watchlist</button>
+              </form>
+
+              {%endfor%}
+          
+
+                {% else %}
+                      <form action="{% url 'Deletelisting' auctionListing.id %}" method="POST">
+                  {% csrf_token %}
+                  <button type="submit" name="button" value="DeleteListing" class="btn btn-outline-danger  btn-lg" style="width: 300px;">Delete Listing</button>
+                </form>
+                {% endif %}
+          </div>    
+
+            <div class = "row" style="margin-bottom: 10px;">
+              {%if request.user.username == auctionListing.seller.username and auctionListing.status %}
+          
+            </div>
+            <div class="row " style="margin-bottom: 5px;display: None;">
+              <div class="btn btn-success btn-lg" style="width: 300px;">
+                Amount : $ {{auctionListing.starting_bid }}
+              </div>
+            </div>
+            <div class="row">
+              <a href="{% url 'CloseBid' auctionListing.id %}" class="btn btn-outline-danger  btn-lg" style="width: 300px;">Close Bid</a>
+              {%endif%}
+            </div>
+            <div class = "row">
+              {%if request.user.username != auctionListing.seller.username and auctionListing.status %}
+              
+            </div>
+            
+            <div class = "row">
+              <br/><a href="{% url 'MakeBid' auctionListing.id %}"class="btn btn-outline-primary btn-lg" style="width: 300px;" >Place Bid</a>
+              {%endif%}
+            </div>
+            <div class = "row">
+              {% if not auctionListing.status %}
+              <div class="btn btn-success btn-lg" style="width: 300px;">
+                <li><strong>Winner : {{latest_bids.user.username }}</strong></li>
+              </div>
+              {% endif %}
+            </div>  
+          </div>
+      </div>
+      
+        <div class="row" style="margin-top: 30px;">
+          <h2>Comments...</h2>
+        </div>
+        <div class="row">
+          {% if auctionListing.status %}
+                <a href="{% url 'AddComment' auctionListing.id %}" class="btn btn-outline-primary btn-lg" style="width: 300px;" >Add Comment</a>
+          {% else %}
+              <p>You cant comment an inactive listing</p>
+
+          {% endif %}
+          <br/>
+        </div>
+        <div class="row">
+          {%if not auctionListing.comments.all%}
+          <br/> No Comments yet...<br/>
+          {%else%}
+          <br/>
+            {%for comment in auctionListing.comments.all%}
+              {{comment.user.username}} -
+              {{comment.commentbody}} :
+              {{comment.commentedDate}}
+              <br/>
+            {%endfor%}
+          {%endif%}
+        </div>
+        <div class="row" style="margin-top: 30px;">
+          <h2>Details</h2>
+          <ul>
+            <li>
+              <h4>Listed by : {{ auctionListing.seller }}</h4>
+            </li>
+            <li>
+              <h5>Category : {{auctionListing.category}}</h5>
+            </li>
+            <li>
+              <h6>  Date Created : {{auctionListing.dateCreated}}</h6>
+            </li>
+            <li>
+              Description : {{auctionListing.description}}
+            </li>
+      
+          </ul>
+        
+        </div>
+      </div>
+    </div>
+
+      <a href = "{%url 'index'%}">Back to Active Listing Page</a>
+
+{% endblock %}

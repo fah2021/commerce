@@ -1,0 +1,39 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h1>You suucessfully closed the listing {{auctionListing.id}}</h1>
+    <ul>
+        <li> Title: {{auctionListing.title}} </li>
+        <li> Description: {{auctionListing.description}}</li>
+
+            <li> Image: <img src="{{auctionListing.header_image.url}}" ></li>
+ 
+    </ul>
+
+        <h2>Clossing Details</h2>
+        Closing Price: {{auctionListing.starting_bid}}<br/><br/><a href="{% url 'MakeBid' auctionListing.id %}">Make Bid</a>
+
+
+
+        {%endif%}
+        
+
+      <h2>Comments...</h2>
+
+      {%if not auctionListing.comments.all%}
+          No Comments yet...<br/><br/><a href="{% url 'AddComment' auctionListing.id %}">Add Comment</a>
+      {%else%}
+      <a href="{% url 'AddComment' auctionListing.id %}">Add Comment</a>
+      <br/><br/>
+        {%for comment in auctionListing.comments.all%}
+          {{comment.name}}-
+          {{comment.date_added}}
+          {{comment.commentbody}}
+        {%endfor%}
+      {%endif%}
+      <br/><br/>
+
+      <a href = "{%url 'index'%}">Back to Active Listing Page</a>
+
+{% endblock %}

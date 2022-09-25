@@ -1,0 +1,24 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<h2>Comment on auctionListing</h2>
+
+<div class="container">
+
+<form method="POST">
+    <h3>Title : {{auctionListing.title}} </h3>
+    
+    
+    <legend>Form</legend>
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+</div>
+
+
+{% endblock %}
